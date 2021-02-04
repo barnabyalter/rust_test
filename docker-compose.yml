@@ -1,0 +1,26 @@
+version: '3.7'
+x-build-default: &build_default
+  image: rust_test
+  build:
+    context: .
+    cache_from:
+      - rust
+      - rust_test
+
+services:
+  build_deps:
+    <<: *build_default
+    command: ["cargo", "build"]
+    volumes:
+      - .:/app
+
+  dev:
+    <<: *build_default
+    volumes:
+      - .:/app
+  
+  watch:
+    <<: *build_default
+    command: ["cargo", "watch", "-x", "run"]
+    volumes:
+      - .:/app
